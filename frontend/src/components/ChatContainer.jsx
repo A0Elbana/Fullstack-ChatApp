@@ -1,6 +1,6 @@
 // Import hooks and components from local files and libraries
 import { useChatStore } from "../store/useChatStore"; // Custom hook for chat-related state
-import { useEffect } from "react"; // React hook for side effects
+import { useEffect, useRef } from "react";
 import MessageSkeleton from "./skeletons/MessageSkeleton"; // Loading skeleton for messages
 import ChatHeader from "./ChatHeader"; // Chat header component
 import MessageInput from "./MessageInput"; // Input component for sending messages
@@ -9,18 +9,43 @@ import { useAuthStore } from "../store/useAuthStore"; // Custom hook for authent
 // Define the ChatContainer component
 const ChatContainer = () => {
   // Destructure values from chat store
-  const { messages, getMessages, isMessagesLoading, selectedUser } =
-    useChatStore();
+  const {
+    messages,
+    getMessages,
+    isMessagesLoading,
+    selectedUser,
+    subscribeToNewMessage,
+    unsubscribeFromNewMessage,
+  } = useChatStore();
 
   // Get the currently authenticated user
   const { authUser } = useAuthStore();
 
+  const messageEndRef = useRef(null); // Ref to scroll to the bottom message
+
   // Fetch messages when selectedUser changes and has a valid _id
   useEffect(() => {
     if (selectedUser?._id) {
-      getMessages(selectedUser._id); // Fetch messages for the selected user
+      getMessages(selectedUser._id); // Load messages for selected user
+      subscribeToNewMessage(); // Subscribe to real-time new messages
     }
-  }, [selectedUser?._id, getMessages]); // Dependencies for the effect
+
+    return () => {
+      unsubscribeFromNewMessage(); // Cleanup subscription on unmount or change
+    };
+  }, [
+    selectedUser?._id,
+    getMessages,
+    subscribeToNewMessage,
+    unsubscribeFromNewMessage,
+  ]); // Dependencies for the effect
+
+  // Scroll to the bottom when new messages arrive
+  useEffect(() => {
+    if (messageEndRef.current && messages) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   // If messages are loading, show skeleton UI
   if (isMessagesLoading)
@@ -86,6 +111,9 @@ const ChatContainer = () => {
             </div>
           </div>
         ))}
+
+        {/* Invisible element to scroll into view at the bottom */}
+        <div ref={messageEndRef} />
       </div>
       {/* Input component for sending new messages */}
       <MessageInput />

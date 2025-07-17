@@ -15,7 +15,6 @@ import SettingsPage from "./pages/SettingsPage.jsx";
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
   const { theme } = useThemeStore();
-
   // Check auth status once on app load
   useEffect(() => {
     checkAuth();
