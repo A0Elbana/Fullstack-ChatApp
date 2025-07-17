@@ -21,6 +21,8 @@ import cors from "cors";
 // Import the Express `app` instance from the socket setup file
 import { app } from "./lib/socket.js";
 
+// Import path to handle file paths
+import path from "path";
 
 // --------------------------- MIDDLEWARES ---------------------------
 
@@ -48,6 +50,14 @@ app.use("/api/v1/auth", authRouter);
 // Mount the message routes under /api/v1/messages
 app.use("/api/v1/messages", messageRouter);
 
+// Serve static files from the frontend build directory
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    })
+}
 
 // --------------------------- EXPORT ---------------------------
 

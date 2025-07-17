@@ -5,7 +5,7 @@ import toast from "react-hot-toast";                     // Toast notifications
 import { io } from "socket.io-client";                   // Socket.io client for real-time communication
 
 // Backend server base URL
-const BACKEND_URL = "http://localhost:1502";
+const BACKEND_URL = import.meta.env.MODE === "development" ? "http://localhost:1502" : "/";
 
 // Zustand store definition for authentication logic
 export const useAuthStore = create((set, get) => ({
