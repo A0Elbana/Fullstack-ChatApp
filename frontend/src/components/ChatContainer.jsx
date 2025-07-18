@@ -69,7 +69,7 @@ const ChatContainer = () => {
             key={message._id} // Unique key for each message (required by React)
             // Align message left or right depending on sender
             className={`chat ${
-              message.senderId === authUser._id ? "chat-end" : "chat-start"
+              message.senderId._id === authUser._id ? "chat-end" : "chat-start"
             }`}
           >
             {/* Avatar section */}
@@ -78,7 +78,7 @@ const ChatContainer = () => {
                 <img
                   // Display profile picture based on sender (authUser or selectedUser)
                   src={
-                    message.senderId === authUser._id
+                    message.senderId._id === authUser._id
                       ? authUser.profilePic || "avatar.png"
                       : selectedUser.profilePic || "avatar.png"
                   }
