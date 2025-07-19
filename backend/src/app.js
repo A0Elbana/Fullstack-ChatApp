@@ -23,7 +23,13 @@ import { app } from "./lib/socket.js";
 
 // Import path to handle file paths
 import path from "path";
+// Creting the dirname variable
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
+// --------------------------- HELPERS FOR __dirname ---------------------------
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 // --------------------------- MIDDLEWARES ---------------------------
 
 // Parse incoming JSON requests with a body size limit of 10MB
