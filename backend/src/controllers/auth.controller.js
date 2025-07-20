@@ -265,30 +265,6 @@ export const updateProfile = async (req, res) => {
 };
 
 // =======================
-// Get all users (admin use)
-// =======================
-export const getUsers = async (req, res) => {
-    try {
-        // Get all users, excluding __v field
-        const users = await User.find().select("-__v");
-        console.log(`📄 Retrieved ${users.length} users`);
-
-        // Send users in response
-        res.status(200).json({
-            status: "success",
-            users,
-        });
-
-    } catch (err) {
-        console.error("💥 Error fetching users:", err.message);
-        res.status(500).json({
-            status: "fail",
-            message: err.message,
-        });
-    }
-};
-
-// =======================
 // Check if user is authenticated
 // =======================
 export const checkAuth = async (req, res) => {
