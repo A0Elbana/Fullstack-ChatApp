@@ -18,11 +18,6 @@ import { authRateLimiter } from "../middleware/rateLimiter.middleware.js";
 // Create a new router instance
 const router = express.Router();
 
-// Route to get all users (⚠️ for testing only – remember to delete later)
-if (process.env?.NODE_ENV === "development") {
-    router.route("/").get(getUsers);
-}
-
 // Route to update user profile (protected)
 router.route("/update-profile").put(protectRoute, updateProfile);
 
